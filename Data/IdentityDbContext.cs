@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Identity_library.Models.Context
+namespace Identity_library.Data
 {
     public class IdentityDbContext : IdentityDbContext<IdentityUser>
     {

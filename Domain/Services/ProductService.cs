@@ -1,6 +1,7 @@
-﻿using Identity_library.Interface;
-using Identity_library.Models;
-using Identity_library.Models.Context;
+﻿using Identity_library.Data;
+using Identity_library.Domain.Interface;
+using Identity_library.Domain.Models;
+using Identity_library.Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -8,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Identity_library.Service
+namespace Identity_library.Domain.Service
 {
     public class ProductService : IProductService
     {
@@ -24,14 +25,14 @@ namespace Identity_library.Service
             if (pnumber != null)
             {
                 return _identitydbContext.Users.FirstOrDefault(p => p.PhoneNumber == pnumber);
-                 
+
             }
             else { throw new Exception("Phone Number not found!"); }
         }
 
-        public  ApiResponse<string> Login(LoginModel model)
+        public ApiResponse<string> Login(LoginModel model)
         {
-            var user =  _identitydbContext.Users.FirstOrDefaultAsync(p => p.UserName == model.UserName);
+            var user = _identitydbContext.Users.FirstOrDefaultAsync(p => p.UserName == model.UserName);
             var claims = new[]
             {
         new Claim("email", model.UserName),
@@ -51,7 +52,7 @@ namespace Identity_library.Service
             var datatoken = $"{tokenString}    |   Email :{model.UserName}";
             return new ApiResponse<string>
             {
-                Success = true, 
+                Success = true,
                 Data = datatoken
             };
         }

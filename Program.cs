@@ -1,17 +1,14 @@
-using Identity_library.Controllers;
-using Identity_library.Interface;
-using Identity_library.Models.Context;
-using Identity_library.Service;
-using Identity_library.User;
+using Identity_library.Data;
+using Identity_library.Domain.Interface;
+using Identity_library.Domain.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer("Data Source=SEZER;Database=IdentityExampleDb;Integrated Security=True;Trust Server Certificate=True;"));
+builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer("DefaultConnection"));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();

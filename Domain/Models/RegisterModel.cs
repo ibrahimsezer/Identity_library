@@ -1,8 +1,6 @@
-﻿using Identity_library.User;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity_library.Models
+namespace Identity_library.Domain.Models
 {
     public class RegisterModel
     {

@@ -1,4 +1,4 @@
-﻿namespace Identity_library.Models.Context
+﻿namespace Identity_library.Domain.Models.Entities
 {
     public class ApiResponse<T>
     {

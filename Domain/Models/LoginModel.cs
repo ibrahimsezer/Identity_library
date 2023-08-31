@@ -1,4 +1,4 @@
-﻿namespace Identity_library.Models
+﻿namespace Identity_library.Domain.Models
 {
     public class LoginModel
     {

@@ -1,13 +1,9 @@
-﻿using Identity_library.Interface;
-using Identity_library.Models;
-using Identity_library.Models.Context;
-using Microsoft.AspNetCore.Http;
+﻿using Identity_library.Domain.Interface;
+using Identity_library.Domain.Models;
+using Identity_library.Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace Identity_library.Controllers
 {
@@ -25,8 +21,7 @@ namespace Identity_library.Controllers
         [HttpGet("GetByPhoneNumber")]
         public async Task<IActionResult> GetById(string pnumber)
         {
-            try
-            {
+            
                 var product = _productService.GetProductByPnumber(pnumber);
 
                 if(product != null)
@@ -46,15 +41,6 @@ namespace Identity_library.Controllers
                         ErrorMessage = "Phone number not found."
                     });
                 }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ApiResponse<string>
-                {
-                    Success = false,
-                    ErrorMessage = ex.Message
-                });
-            }
         }
 
         [HttpPost("token_login")]

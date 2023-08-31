@@ -1,4 +1,4 @@
-﻿using Identity_library.Models;
+﻿using Identity_library.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
