@@ -1,8 +1,13 @@
 ﻿using Identity_library.Interface;
+using Identity_library.Models;
 using Identity_library.Models.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Identity_library.Controllers
 {
@@ -51,5 +56,18 @@ namespace Identity_library.Controllers
                 });
             }
         }
+
+        [HttpPost("token_login")]
+        public async Task<IActionResult> Post([FromBody] LoginModel model)
+        {
+            var loginResponse = _productService.Login(model);
+            if (loginResponse.Success)
+            {
+                return Ok(loginResponse);
+            }
+
+            return BadRequest(loginResponse);
+        }
+
     }
 }

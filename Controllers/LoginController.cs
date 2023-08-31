@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Identity_library.Controllers
 {
@@ -20,7 +24,7 @@ namespace Identity_library.Controllers
             }
 
             [HttpPost("login")]
-            public async Task<ActionResult> Post([FromBody] LoginModel model)
+            public async Task<IActionResult> Post([FromBody] LoginModel model)
             {
                 // Kullanıcıyı doğrulayın.
                 var user = await _userManager.FindByNameAsync(model.UserName);
@@ -35,11 +39,11 @@ namespace Identity_library.Controllers
                     return BadRequest("Parola yanlış.");
                 }
 
-                // Kullanıcıyı oturum açtırın.
-                await _signInManager.SignInAsync(user, model.RememberMe);
+           
+            // Kullanıcıyı oturum açtırın.
+            await _signInManager.SignInAsync(user, model.RememberMe);
 
-                // Kullanıcıyı yönlendirin.
-                return Ok("Oturum açıldı.");
+            return Ok("Oturum açıldı.");
             }
         
     }
