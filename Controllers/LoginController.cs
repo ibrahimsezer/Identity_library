@@ -26,8 +26,13 @@ namespace Identity_library.Controllers
             [HttpPost("login")]
             public async Task<IActionResult> Post([FromBody] LoginModel model)
             {
-                // Kullanıcıyı doğrulayın.
-                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+            // Kullanıcıyı doğrulayın.
+            var user = await _userManager.FindByNameAsync(model.UserName);
                 if (user == null)
                 {
                     return BadRequest("Kullanıcı adı bulunamadı.");

@@ -1,14 +1,30 @@
 using Identity_library.Data;
 using Identity_library.Domain.Interface;
+using Identity_library.Domain.Models;
+using Identity_library.Domain.Models.Helper;
 using Identity_library.Domain.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
+builder.Services.AddSingleton(configuration);
 
-builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer("DefaultConnection"));
+var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+builder.Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+builder.Services.AddSingleton(jwtSettings);
+
+
+// Add services to the container.
+//builder.Services.AddSingleton("SecretKey");
+builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();

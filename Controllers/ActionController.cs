@@ -46,6 +46,10 @@ namespace Identity_library.Controllers
         [HttpPost("token_login")]
         public async Task<IActionResult> Post([FromBody] LoginModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var loginResponse = _productService.Login(model);
             if (loginResponse.Success)
             {
