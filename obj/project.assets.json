@@ -1323,6 +1323,16 @@
             "rid": "win"
           }
         }
+      },
+      "Shared.Library/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Shared.Library.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shared.Library.dll": {}
+        }
       }
     }
   },
@@ -4094,6 +4104,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Shared.Library/1.0.0": {
+      "type": "project",
+      "path": "../Shared.Library/Shared.Library.csproj",
+      "msbuildProject": "../Shared.Library/Shared.Library.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4103,6 +4118,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.10",
+      "Shared.Library >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.5.0",
       "System.IdentityModel.Tokens.Jwt >= 6.32.2"
     ]
@@ -4134,7 +4150,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\ibrah\\source\\repos\\Shared.Library\\Shared.Library.csproj": {
+              "projectPath": "C:\\Users\\ibrah\\source\\repos\\Shared.Library\\Shared.Library.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

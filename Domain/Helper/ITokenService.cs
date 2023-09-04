@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Identity_library.Domain.Models.Helper
+namespace Identity_library.Domain.Helper
 {
     public interface ITokenService
     {

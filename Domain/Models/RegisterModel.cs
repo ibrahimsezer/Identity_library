@@ -5,11 +5,11 @@ namespace Identity_library.Domain.Models
     public class RegisterModel
     {
 
-        [Required]
+        [Required(ErrorMessage ="Email required.")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Phone Number required")]
         [Phone]
         public string PhoneNumber { get; set; }
 
@@ -19,7 +19,7 @@ namespace Identity_library.Domain.Models
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        [Compare("Password", ErrorMessage = "Password does not match")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }

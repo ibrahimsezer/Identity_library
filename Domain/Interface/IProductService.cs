@@ -1,12 +1,15 @@
-﻿using Identity_library.Domain.Models;
-using Identity_library.Domain.Models.Entities;
+﻿using Identity_library.Domain.DTOS;
+using Identity_library.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using SharedLibrary;
 
 namespace Identity_library.Domain.Interface
 {
     public interface IProductService
     {
-        IdentityUser GetProductByPnumber(string pnumber);
-        ApiResponse<string> Login(LoginModel model);
+        Task<IEnumerable<UserDTO>> GetAllUsers();
+        Task<IdentityUser> GetByNumber(string pnumber);
+        Task<Response<string>> Login(LoginModel model);
+        Task<IdentityUser> DeleteUser(string pnumber);
     }
 }

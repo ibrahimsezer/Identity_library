@@ -1,11 +1,12 @@
 using Identity_library.Data;
+using Identity_library.Domain.Helper;
 using Identity_library.Domain.Interface;
 using Identity_library.Domain.Models;
-using Identity_library.Domain.Models.Helper;
 using Identity_library.Domain.Service;
+using Identity_library.Domain.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using SharedLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRegisterService, RegisterService>();
+
 //builder.Services.AddScoped<AccountController>();
 
 builder.Services.AddControllers();

@@ -1,9 +1,10 @@
-﻿using Identity_library.Domain.Interface;
+﻿using Identity_library.Domain.DTOS;
+using Identity_library.Domain.Interface;
 using Identity_library.Domain.Models;
-using Identity_library.Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using SharedLibrary;
 
 namespace Identity_library.Controllers
 {
@@ -17,29 +18,37 @@ namespace Identity_library.Controllers
         {
             _productService = productService;
         }
-
+        [HttpGet ("GetAllUsers")]
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+        {
+            // Tüm verileri çekmek için DbContext'i kullanın
+            return await _productService.GetAllUsers();
+            
+        }
         [HttpGet("GetByPhoneNumber")]
         public async Task<IActionResult> GetById(string pnumber)
         {
             
-                var product = _productService.GetProductByPnumber(pnumber);
+                var product = await _productService.GetByNumber(pnumber);
 
                 if(product != null)
                 {
-                    return Ok(new ApiResponse<IdentityUser>
+                    return Ok(new Response<IdentityUser>
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Data = product
                     }) ;
 
                 }
                 else
                 {
-                    return NotFound(new ApiResponse<string>
+                    var notFound = new List<string> {"PhoneNumber Not Found" };
+                    return NotFound(new Response<IdentityUser>
                     {
-                        Success = false,
-                        ErrorMessage = "Phone number not found."
-                    });
+                        IsSuccess = false,
+                        Errors = notFound
+
+            });
                 }
         }
 
@@ -50,13 +59,23 @@ namespace Identity_library.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var loginResponse = _productService.Login(model);
-            if (loginResponse.Success)
+            var loginResponse =await _productService.Login(model);
+            if (loginResponse.IsSuccess)
             {
                 return Ok(loginResponse);
             }
 
             return BadRequest(loginResponse);
+        }
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser(string pnumber)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _productService.DeleteUser(pnumber);
+            return Ok($"{pnumber} : User Deleted.");
         }
 
     }

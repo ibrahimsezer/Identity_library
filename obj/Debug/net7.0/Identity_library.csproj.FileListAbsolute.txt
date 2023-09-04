@@ -80,3 +80,5 @@ C:\Users\ibrah\source\repos\Identity_library\obj\Debug\net7.0\refint\Identity_li
 C:\Users\ibrah\source\repos\Identity_library\obj\Debug\net7.0\Identity_library.pdb
 C:\Users\ibrah\source\repos\Identity_library\obj\Debug\net7.0\Identity_library.genruntimeconfig.cache
 C:\Users\ibrah\source\repos\Identity_library\obj\Debug\net7.0\ref\Identity_library.dll
+C:\Users\ibrah\source\repos\Identity_library\bin\Debug\net7.0\Shared.Library.dll
+C:\Users\ibrah\source\repos\Identity_library\bin\Debug\net7.0\Shared.Library.pdb

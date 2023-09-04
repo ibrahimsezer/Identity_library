@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\DTOS\" />
+    <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
   </ItemGroup>
 
 </Project>
