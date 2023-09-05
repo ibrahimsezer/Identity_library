@@ -11,5 +11,6 @@ namespace Identity_library.Domain.Interface
         Task<IdentityUser> GetByNumber(string pnumber);
         Task<IdentityUser> DeleteUser(string pnumber);
         Task<IdentityUser> UpdateUser(string email,UserDTO model);
+        Task<IdentityUser> UpdatePassword(PasswordResetModel model);
     }
 }

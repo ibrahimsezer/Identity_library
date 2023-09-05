@@ -3,6 +3,7 @@ using Identity_library.Domain.DTOS;
 using Identity_library.Domain.Helper;
 using Identity_library.Domain.Interface;
 using Identity_library.Domain.Models;
+using Identity_library.Domain.Models.User;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,13 @@ namespace Identity_library.Domain.Service
     public class UserService : IUserService
     {
         private readonly IdentityDbContext _identitydbContext;
-        private readonly ITokenService _tokenService;
-
-        public UserService(IdentityDbContext dbContext, ITokenService tokenService)
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public UserService(IdentityDbContext dbContext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _identitydbContext = dbContext;
-            _tokenService = tokenService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
 
@@ -77,6 +79,33 @@ namespace Identity_library.Domain.Service
             else throw new Exception("User not found");
         }
 
+
+         async Task<IdentityUser> IUserService.UpdatePassword(PasswordResetModel model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Email == model.Email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, model.OldPassword);
+
+            if (!isPasswordValid)
+            {
+                throw new Exception("The old password is invalid");
+            }
+            if(model.OldPassword == model.NewPassword)
+            { throw new Exception("The new password cannot be the same as the old one"); }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (!changePasswordResult.Succeeded)
+            {
+                throw new Exception("Password change failed.");
+            }
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            return null;
+        }
         //var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKey123456789012345678901234"));
         //var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 

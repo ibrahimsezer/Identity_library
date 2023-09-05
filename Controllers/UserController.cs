@@ -71,6 +71,16 @@ namespace Identity_library.Controllers
             await _userService.UpdateUser(email,model);
             return Ok($"User Updated. Username : {model.Username} | Email : {model.Email} | Number : {model.PhoneNumber}");
         }
+        [HttpPut("UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword(PasswordResetModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _userService.UpdatePassword(model);
+            return Ok($"Password Changed. New password : {model.NewPassword}");
+        }
 
     }
 }
