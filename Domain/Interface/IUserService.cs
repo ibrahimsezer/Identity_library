@@ -5,11 +5,11 @@ using SharedLibrary;
 
 namespace Identity_library.Domain.Interface
 {
-    public interface IProductService
+    public interface IUserService
     {
         Task<IEnumerable<UserDTO>> GetAllUsers();
         Task<IdentityUser> GetByNumber(string pnumber);
-        Task<Response<string>> Login(LoginModel model);
         Task<IdentityUser> DeleteUser(string pnumber);
+        Task<IdentityUser> UpdateUser(string email,UserDTO model);
     }
 }

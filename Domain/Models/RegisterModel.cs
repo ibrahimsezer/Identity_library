@@ -9,6 +9,9 @@ namespace Identity_library.Domain.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required(ErrorMessage ="Username required.")]
+        public string Username { get; set; }
+
         [Required(ErrorMessage ="Phone Number required")]
         [Phone]
         public string PhoneNumber { get; set; }

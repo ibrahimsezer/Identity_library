@@ -29,8 +29,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IRegisterService, RegisterService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 //builder.Services.AddScoped<AccountController>();
 

@@ -5,8 +5,10 @@ using SharedLibrary;
 
 namespace Identity_library.Domain.Interface
 {
-    public interface IRegisterService
+    public interface IAuthService
     {
         Task<Response<RegisterModel>> RegisterAsyncService(RegisterModel model);
+        Task<Response<string>> Login(LoginModel model);
+
     }
 }

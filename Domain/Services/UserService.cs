@@ -11,12 +11,12 @@ using System.Security.Claims;
 
 namespace Identity_library.Domain.Service
 {
-    public class ProductService : IProductService
+    public class UserService : IUserService
     {
         private readonly IdentityDbContext _identitydbContext;
         private readonly ITokenService _tokenService;
 
-        public ProductService(IdentityDbContext dbContext, ITokenService tokenService)
+        public UserService(IdentityDbContext dbContext, ITokenService tokenService)
         {
             _identitydbContext = dbContext;
             _tokenService = tokenService;
@@ -31,9 +31,10 @@ namespace Identity_library.Domain.Service
             // Tüm verileri çekmek için DbContext'i kullanın
             var userDTOs = data.Select(user => new UserDTO
             {
-                Id = user.Id,
+                
                 Username = user.UserName,
-                Phonenumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email
             }).ToList();
             return userDTOs;
 
@@ -49,23 +50,7 @@ namespace Identity_library.Domain.Service
             else { throw new Exception("Phone Number not found!"); }
         }
 
-        public async Task<Response<string>> Login(LoginModel model)
-        {
-            var user = await _identitydbContext.Users.FirstOrDefaultAsync(p => p.UserName == model.UserName);
-            var claims = new[]
-            {
-            new Claim("email", model.UserName),
-            new Claim("userid", user.Id.ToString())
-            };
-            var token = _tokenService.GenerateToken(model.UserName, claims);
-            var datatoken = $"{token}    |   Email :{model.UserName}";
-            var resp = new Response<string>
-            {
-                IsSuccess = true,
-                Data = datatoken
-            };
-            return resp;
-        }
+       
         public async Task<IdentityUser> DeleteUser(string pnumber)
         {
             if (pnumber != null)
@@ -76,6 +61,20 @@ namespace Identity_library.Domain.Service
                 return null;
             }
             else { throw new Exception("Phone number not found"); }
+        }
+
+        public async Task<IdentityUser> UpdateUser(string email,UserDTO model)
+        {
+            if (email != null)
+            {
+                var user = await _identitydbContext.Users.FirstOrDefaultAsync(e => e.Email ==email);
+                user.UserName = model.Username;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
+                await _identitydbContext.SaveChangesAsync();
+                return user;
+            }
+            else throw new Exception("User not found");
         }
 
         //var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKey123456789012345678901234"));
