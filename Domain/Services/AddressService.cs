@@ -18,18 +18,28 @@ namespace Identity_library.Domain.Services
 
         public async Task<UserAddress> CreateAddress(UserAddress model)
         {
+
+            var existingAddress = await _identitydbContext.UserAddresses
+        .FirstOrDefaultAsync(address => address.Title == model.Title);
+
+            if (existingAddress != null)
+            {
+                throw new Exception($"{model.Title} already exists");
+            }
             var address = new UserAddress();
             address.Title = model.Title;
             address.Address = model.Address;
+            address.IsActive = model.IsActive;
+            
 
             await _identitydbContext.AddAsync(address);
             await _identitydbContext.SaveChangesAsync();
             return address;
         }
 
-        public async Task<UserAddress> DeleteAddress(string title)
+        public async Task<UserAddress> DeleteAddress(int id)
         {
-            var addressToDelete = await _identitydbContext.UserAddresses.FirstOrDefaultAsync(address => address.Title == title);
+            var addressToDelete = await _identitydbContext.UserAddresses.FirstOrDefaultAsync(address => address.Id == id);
 
             if (addressToDelete != null)
             {
@@ -55,6 +65,7 @@ namespace Identity_library.Domain.Services
             {
                 existingAddress.Title = model.Title;
                 existingAddress.Address = model.Address;
+                existingAddress.IsActive = model.IsActive;
 
                 _identitydbContext.UserAddresses.Update(existingAddress);
                 await _identitydbContext.SaveChangesAsync();
@@ -62,6 +73,11 @@ namespace Identity_library.Domain.Services
 
             return existingAddress;
 
+        }
+
+        public async Task<IEnumerable<UserAddress>> GetActiveAddress()
+        {
+            return await _identitydbContext.UserAddresses.Where(a => a.IsActive).ToListAsync();
         }
     }
 }

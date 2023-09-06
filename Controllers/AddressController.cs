@@ -21,6 +21,12 @@ namespace Identity_library.Controllers
             var address = await _addressService.GetAllAddress();
             return Ok(address);
         }
+        [HttpGet("GetIsActive")]
+        public async Task<IActionResult> GetActiveAddress()
+        {
+            var activeAddress = await _addressService.GetActiveAddress();
+            return Ok(activeAddress);
+        }
         [HttpPost("CreateAddress")]
 
         public async Task<IActionResult> CreateAddress(UserAddress model)
@@ -35,9 +41,9 @@ namespace Identity_library.Controllers
             return Ok($"Address updated. New address : {address.Title} | {address.Address}");
         }
         [HttpDelete("DeleteAddress")]
-        public async Task<IActionResult> DeleteAddress(string title)
+        public async Task<IActionResult> DeleteAddress(int id)
         {
-            var address = await _addressService.DeleteAddress(title);
+            var address = await _addressService.DeleteAddress(id);
             return Ok("Address deleted.");
         }
     }

@@ -86,6 +86,13 @@ namespace Identity_library.Controllers
 
             return BadRequest(loginResponse);
         }
+        //[HttpPost("logout")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    return Ok("Logout Successful");
+        //}
 
     }
 }

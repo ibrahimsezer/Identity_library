@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity_library.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20230906111505_mig_1")]
+    [Migration("20230906134949_mig_1")]
     partial class mig_1
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace Identity_library.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
