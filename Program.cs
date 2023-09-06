@@ -6,6 +6,7 @@ using Identity_library.Domain.Service;
 using Identity_library.Domain.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SharedLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables()
     .Build();
+builder.Services.AddDbContext<IdentityDbContext>(options =>
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton(configuration);
 
 var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -24,15 +27,16 @@ builder.Services.AddSingleton(jwtSettings);
 
 // Add services to the container.
 //builder.Services.AddSingleton("SecretKey");
-builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<IdentityDbContext>(_ => _.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IAddressService, AddressService>();
 //builder.Services.AddScoped<AccountController>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
