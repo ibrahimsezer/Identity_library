@@ -71,6 +71,7 @@ namespace Identity_library.Controllers
             await _userService.UpdateUser(email,model);
             return Ok($"User Updated. Username : {model.Username} | Email : {model.Email} | Number : {model.PhoneNumber}");
         }
+
         [HttpPut("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword(PasswordResetModel model)
         {
@@ -82,5 +83,24 @@ namespace Identity_library.Controllers
             return Ok($"Password Changed. New password : {model.NewPassword}");
         }
 
+        [HttpPost("RoleCreate")]
+        public async Task<IActionResult> RoleCreate(string role)
+        {
+            var userrole = await _userService.RoleCreate(role);
+            return Ok(userrole);
+        }
+
+        [HttpPost("UserRole")]
+        public async Task<IActionResult> UserRole(UserDTO user, string role)
+        {
+            var userrole = await _userService.UserRole(user,role);
+            return Ok(userrole.Username + $" user is authorized as {role}");
+        }
+        [HttpPost("UserRoleControl")]
+        public async Task<IActionResult> UserRoleControl(UserDTO user, string role)
+        {
+            var userrole = await _userService.UserRoleControl(user, role);
+            return Ok(userrole.Username + $" has {role} authority");
+        }
     }
 }

@@ -3,6 +3,7 @@ using Identity_library.Domain.DTOS;
 using Identity_library.Domain.Helper;
 using Identity_library.Domain.Interface;
 using Identity_library.Domain.Models;
+using Identity_library.Domain.Models.Entities;
 using Identity_library.Domain.Models.User;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -17,11 +18,13 @@ namespace Identity_library.Domain.Service
         private readonly IdentityDbContext _identitydbContext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public UserService(IdentityDbContext dbContext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        private readonly RoleManager<IdentityRole> _identityRole;
+        public UserService(IdentityDbContext dbContext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> identityRole)
         {
             _identitydbContext = dbContext;
             _userManager = userManager;
             _signInManager = signInManager;
+            _identityRole = identityRole;
         }
 
 
@@ -106,6 +109,52 @@ namespace Identity_library.Domain.Service
 
             return null;
         }
+
+        public async Task<IdentityRole> RoleCreate(string role)
+        {
+            var userrole = new IdentityRole(role);
+
+            var result = await _identityRole.CreateAsync(userrole);
+
+            return result.Succeeded ? userrole : throw new Exception("Could not created role");
+
+
+        }
+        public async Task<UserDTO> UserRole(UserDTO user, string role)
+        {
+            var _user = await _userManager.FindByNameAsync(user.Username);
+            var _user1 = new UserDTO()
+            {
+                Username = _user.UserName,
+                Email = _user.Email,
+                PhoneNumber = _user.PhoneNumber
+            };
+            // Rolü bulun
+            var _role = await _identityRole.FindByNameAsync(role);
+
+            // Kullanıcıya rol atama
+            var result = await _userManager.AddToRoleAsync(_user, role);
+
+            return result.Succeeded ? _user1  : throw new Exception("Could not add user role");
+        }
+
+        public async Task<RoleControl> UserRoleControl(UserDTO user, string role)
+        {
+            var _user = await _userManager.FindByNameAsync(user.Username);
+            var _user1 = new RoleControl()
+            {
+                Username = _user.UserName,
+                Role = role
+            };
+            await _identityRole.FindByNameAsync(role);
+            if (await _userManager.IsInRoleAsync(_user, role))
+            {
+                return _user1;
+            }
+            else throw new Exception($"{_user1} : User does not have this privilege"); 
+        }
+
+
         //var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKey123456789012345678901234"));
         //var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 

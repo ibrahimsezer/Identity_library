@@ -75,9 +75,30 @@ namespace Identity_library.Domain.Services
 
         }
 
-        public async Task<IEnumerable<UserAddress>> GetActiveAddress()
+        public async Task<UserAddress> GetActiveAddress()
         {
-            return await _identitydbContext.UserAddresses.Where(a => a.IsActive).ToListAsync();
+            var latestAddress = await _identitydbContext.UserAddresses
+                    .OrderByDescending(a => a.Id) // Varsayılan birincil anahtar kullanılıyor
+                    .FirstOrDefaultAsync();
+
+            if (latestAddress != null)
+            {
+                // Tüm adreslerin IsActive değerini false olarak güncelle
+                var allAddresses = await _identitydbContext.UserAddresses.ToListAsync();
+                foreach (var address in allAddresses)
+                {
+                    address.IsActive = false;
+                }
+
+                // En son eklenen adresin IsActive değerini true olarak güncelle
+                latestAddress.IsActive = true;
+
+                // Değişiklikleri veritabanına kaydet
+                await _identitydbContext.SaveChangesAsync();
+                return latestAddress;
+            }
+            else 
+            throw new Exception("Latest address mistake");
         }
     }
 }
